@@ -22,7 +22,6 @@ void memory(void);
 void volume(void);
 void scrollText(void);
 
-char message[] = "Caooos";
 int count = 0;
 int j = 0;
 FILE *mem_file;
@@ -46,69 +45,10 @@ int main()
 		lcdClear(lcd);
 		volume();
 		sleep(1);
-		memory();
-		sleep(4);
-		lcdClear(lcd);
-		sleep(1);
-		scrollText();
 	}
 }
 
-void memory(void)
-{
-	char MemTotal[35];
-	char MemFree[35];
-	char total[35];
-	char free[35];
 
-	lcdClear(lcd);
-
-	mem_file = fopen("/proc/meminfo","r");
-
-	if( NULL != mem_file)
-	{
-		fscanf(mem_file,"%*s%s%*s", MemTotal);
-		fscanf(mem_file,"%*s%s%*s", MemFree);
-		printf("/x1B[2J");			 // Brisanje ekrana 
-		lcdPosition(lcd,0,0);
-		lcdPrintf(lcd,"memTotal-%sk",MemTotal);
-		lcdPosition(lcd,0,1);
-		lcdPrintf(lcd,"MemFree -%sk",MemFree);
-		fclose(mem_file);
-	}
-	else
-	{
-		printf("Otvaranje fajla /proc/meminfo nije uspelo!\n");
-	}
-}
-
-void scrollText(void)
-{
-	int i,n;
-	int h;
-	int tempSpace = 0;
-	char scrollPadding[] = "                    ";
-
-	int messageLength = strlen(scrollPadding) + strlen(message);
-	for ( n = 0 ; n < messageLength ; n ++)
-	{
-		h = COLUMNS;
-		usleep(300000);
-		printf("\x1B[2J");
-		if ( j> messageLength)
-		{
-			j = 0;
-		}
-		for ( i = 0 ; i < j ; i ++ ) {
-			scrollPadding[h-j] = message[i];
-			h++;
-		}
-		lcdPosition(lcd,0,0);
-		lcdClear(lcd);
-		lcdPrintf(lcd,"%s",scrollPadding);
-		j++;
-	}
-}
 
 void volume(void)
 {
@@ -120,8 +60,9 @@ void volume(void)
 	lcdClear(lcd);
 
 	int i;
-	lcdPosition(lcd,9,1);
-	lcdPuts(lcd,":Volume");
+	lcdPosition(lcd,0,0);
+	lcdPuts(lcd,"Cirilicna slova:");
+	lcdPosition(lcd,0,1);
 	for(i = 0 ; i < 8 ; i++)
 	{
 		lcdPosition(lcd,i,1);
